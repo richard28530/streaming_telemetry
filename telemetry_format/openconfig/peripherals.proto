@@ -1,0 +1,95 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+syntax = "proto3";
+
+package proto.peripherals;
+
+// Paths:
+// /peripherals/fan
+// /peripherals/power
+// /peripherals/transceiver
+// /peripherals/transceiver/ddm
+// /peripherals/sensor
+
+message Fan {
+    string name = 1;
+    uint32 speed_rpm = 2;
+    uint32 speed_per = 3;
+}
+
+message PeripheralsFan {
+    uint32 fan_num = 1;
+    repeated Fan fans = 2;
+}
+
+message Power {
+    string name = 1;
+    string status = 2;
+    string serial_number = 3;
+    uint32 temperature = 4;
+    uint32 input_current = 5;
+    uint32 input_voltage = 6;
+    uint32 input_power = 7;
+    uint32 output_current = 8;
+    uint32 output_voltage = 9;
+    uint32 output_power = 10;
+}
+
+message PeripheralsPower {
+    uint32 power_num = 1;
+    repeated Power powers = 2;
+}
+
+message TranceiverDdm {
+    float temperature = 1;
+    float voltage = 2;
+    float bias = 3;
+    float tx_power = 4;
+    float rx_power = 5;
+}
+
+message Tranceiver {
+    string intf_name = 1;
+    string vendor_name = 2;
+    string serial_number = 3;
+    string product_number = 4;
+    string module_type = 5;
+    uint32 cable_length = 6;
+    TranceiverDdm ddm = 7;
+}
+
+message PeripheralsTranceiver {
+    repeated Tranceiver tranceivers = 1;
+}
+
+message Sensor {
+    string name = 1;
+    uint32 temperature = 2;
+}
+
+message PeripheralsSensor {
+    uint32 average_temperature = 1;
+    uint32 sensor_num = 2;
+    repeated Sensor sensors = 3;
+}
+
+message Peripherals {
+    PeripheralsFan fan = 1;
+    PeripheralsPower power = 2;
+    PeripheralsTranceiver tranceiver = 3;
+    PeripheralsSensor sensor = 4;
+}
+

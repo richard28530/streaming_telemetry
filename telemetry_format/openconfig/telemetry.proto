@@ -1,0 +1,240 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+//import "ietf-inet-types.proto";
+//import "openconfig-extensions.proto";
+//import "openconfig-rpc-types.proto";
+
+package proto.telmetry;
+
+// Paths:
+// telemetry-system/subscriptions/dynamic/subscription/sensor-paths/sensor-path/state
+// telemetry-system/subscriptions/dynamic/subscription/sensor-paths/sensor-path
+// telemetry-system/subscriptions/dynamic/subscription/sensor-paths
+// telemetry-system/subscriptions/dynamic/subscription/state
+// telemetry-system/subscriptions/dynamic/subscription
+// telemetry-system/subscriptions/dynamic
+// telemetry-system/subscriptions/persistent/subscription/destination-groups/destination-group/state
+// telemetry-system/subscriptions/persistent/subscription/destination-groups/destination-group/config
+// telemetry-system/subscriptions/persistent/subscription/destination-groups/destination-group
+// telemetry-system/subscriptions/persistent/subscription/destination-groups
+// telemetry-system/subscriptions/persistent/subscription/sensor-profiles/sensor-profile/state
+// telemetry-system/subscriptions/persistent/subscription/sensor-profiles/sensor-profile/config
+// telemetry-system/subscriptions/persistent/subscription/sensor-profiles/sensor-profile
+// telemetry-system/subscriptions/persistent/subscription/sensor-profiles
+// telemetry-system/subscriptions/persistent/subscription/state
+// telemetry-system/subscriptions/persistent/subscription/config
+// telemetry-system/subscriptions/persistent/subscription
+// telemetry-system/subscriptions/persistent
+// telemetry-system/subscriptions
+// telemetry-system/destination-groups/destination-group/destinations/destination/state
+// telemetry-system/destination-groups/destination-group/destinations/destination/config
+// telemetry-system/destination-groups/destination-group/destinations/destination
+// telemetry-system/destination-groups/destination-group/destinations
+// telemetry-system/destination-groups/destination-group/state
+// telemetry-system/destination-groups/destination-group/config
+// telemetry-system/destination-groups/destination-group
+// telemetry-system/destination-groups
+// telemetry-system/sensor-groups/sensor-group/sensor-paths/sensor-path/state
+// telemetry-system/sensor-groups/sensor-group/sensor-paths/sensor-path/config
+// telemetry-system/sensor-groups/sensor-group/sensor-paths/sensor-path
+// telemetry-system/sensor-groups/sensor-group/sensor-paths
+// telemetry-system/sensor-groups/sensor-group/state
+// telemetry-system/sensor-groups/sensor-group/config
+// telemetry-system/sensor-groups/sensor-group
+// telemetry-system/sensor-groups
+// telemetry-system
+
+message SensorPathState {
+    string path = 1;
+    string exclude_filter = 2;
+}
+
+message SensorPathsSensorPath {
+    SensorPathState state = 1;
+}
+
+message SubscriptionSensorPaths {
+    repeated SensorPathsSensorPath sensor_path = 1;
+}
+
+message SubscriptionState {
+    uint64 subscription_id = 1;
+    None destination_address = 2;
+    uint32 destination_port = 3;
+    uint64 sample_interval = 4;
+    uint64 heartbeat_interval = 5;
+    bool suppress_redundant = 6;
+    None originated_qos_marking = 7;
+    string protocol = 8;
+    string encoding = 9;
+}
+
+message DynamicSubscription {
+    SubscriptionState state = 1;
+    SubscriptionSensorPaths sensor_paths = 2;
+}
+
+message SubscriptionsDynamic {
+    repeated DynamicSubscription subscription = 1;
+}
+
+message DestinationGroupState {
+}
+
+message DestinationGroupConfig {
+}
+
+message DestinationGroupsDestinationGroup {
+    DestinationGroupConfig config = 1;
+    DestinationGroupState state = 2;
+}
+
+message SubscriptionDestinationGroups {
+    repeated DestinationGroupsDestinationGroup destination_group = 1;
+}
+
+message SensorProfileState {
+    uint64 sample_interval = 1;
+    uint64 heartbeat_interval = 2;
+    bool suppress_redundant = 3;
+}
+
+message SensorProfileConfig {
+    uint64 sample_interval = 1;
+    uint64 heartbeat_interval = 2;
+    bool suppress_redundant = 3;
+}
+
+message SensorProfilesSensorProfile {
+    SensorProfileConfig config = 1;
+    SensorProfileState state = 2;
+}
+
+message SubscriptionSensorProfiles {
+    repeated SensorProfilesSensorProfile sensor_profile = 1;
+}
+
+message SubscriptionState {
+    string subscription_name = 1;
+    uint64 subscription_id = 2;
+    None local_source_address = 3;
+    None originated_qos_marking = 4;
+    string protocol = 5;
+    string encoding = 6;
+}
+
+message SubscriptionConfig {
+    string subscription_name = 1;
+    None local_source_address = 2;
+    None originated_qos_marking = 3;
+    string protocol = 4;
+    string encoding = 5;
+}
+
+message PersistentSubscription {
+    SubscriptionConfig config = 1;
+    SubscriptionState state = 2;
+    SubscriptionSensorProfiles sensor_profiles = 3;
+    SubscriptionDestinationGroups destination_groups = 4;
+}
+
+message SubscriptionsPersistent {
+    repeated PersistentSubscription subscription = 1;
+}
+
+message TelemetrySystemSubscriptions {
+    SubscriptionsPersistent persistent = 1;
+    SubscriptionsDynamic dynamic = 2;
+}
+
+message DestinationState {
+    None destination_address = 1;
+    uint32 destination_port = 2;
+}
+
+message DestinationConfig {
+    None destination_address = 1;
+    uint32 destination_port = 2;
+}
+
+message DestinationsDestination {
+    DestinationConfig config = 1;
+    DestinationState state = 2;
+}
+
+message DestinationGroupDestinations {
+    repeated DestinationsDestination destination = 1;
+}
+
+message DestinationGroupState {
+    string group_id = 1;
+}
+
+message DestinationGroupConfig {
+    string group_id = 1;
+}
+
+message DestinationGroupsDestinationGroup {
+    DestinationGroupConfig config = 1;
+    DestinationGroupState state = 2;
+    DestinationGroupDestinations destinations = 3;
+}
+
+message TelemetrySystemDestinationGroups {
+    repeated DestinationGroupsDestinationGroup destination_group = 1;
+}
+
+message SensorPathConfig {
+    string path = 1;
+    string exclude_filter = 2;
+}
+
+message SensorPathsSensorPath {
+    SensorPathConfig config = 1;
+    SensorPathState state = 2;
+}
+
+message SensorGroupSensorPaths {
+    repeated SensorPathsSensorPath sensor_path = 1;
+}
+
+message SensorGroupState {
+    string sensor_group_id = 1;
+}
+
+message SensorGroupConfig {
+    string sensor_group_id = 1;
+}
+
+message SensorGroupsSensorGroup {
+    SensorGroupConfig config = 1;
+    SensorGroupState state = 2;
+    SensorGroupSensorPaths sensor_paths = 3;
+}
+
+message TelemetrySystemSensorGroups {
+    repeated SensorGroupsSensorGroup sensor_group = 1;
+}
+
+message TelemetrySystem {
+    TelemetrySystemSensorGroups sensor_groups = 1;
+    TelemetrySystemDestinationGroups destination_groups = 2;
+    TelemetrySystemSubscriptions subscriptions = 3;
+}
+

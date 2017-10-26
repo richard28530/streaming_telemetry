@@ -1,0 +1,1081 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+//import "openconfig-extensions.proto";
+
+package proto.bgp;
+
+// Paths:
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l2vpn-evpn/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l2vpn-evpn/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l2vpn-evpn/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l2vpn-evpn
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l2vpn-vpls/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l2vpn-vpls/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l2vpn-vpls/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l2vpn-vpls
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv6-multicast/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv6-multicast/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv6-multicast/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv6-multicast
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv4-multicast/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv4-multicast/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv4-multicast/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv4-multicast
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv6-unicast/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv6-unicast/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv6-unicast/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv6-unicast
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv4-unicast/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv4-unicast/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv4-unicast/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/l3vpn-ipv4-unicast
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-labeled-unicast/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-labeled-unicast/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-labeled-unicast/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-labeled-unicast
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-labeled-unicast/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-labeled-unicast/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-labeled-unicast/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-labeled-unicast
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-unicast/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-unicast/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-unicast/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-unicast/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-unicast/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv6-unicast
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-unicast/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-unicast/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-unicast/prefix-limit/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-unicast/prefix-limit/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-unicast/prefix-limit
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/ipv4-unicast
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/use-multiple-paths/ibgp/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/use-multiple-paths/ibgp/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/use-multiple-paths/ibgp
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/use-multiple-paths/ebgp/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/use-multiple-paths/ebgp/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/use-multiple-paths/ebgp
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/use-multiple-paths/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/use-multiple-paths/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/use-multiple-paths
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/route-selection-options/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/route-selection-options/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/route-selection-options
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/graceful-restart/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/graceful-restart/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/graceful-restart
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/state
+// bgp/peer-groups/peer-group/afi-safis/afi-safi/config
+// bgp/peer-groups/peer-group/afi-safis/afi-safi
+// bgp/peer-groups/peer-group/afi-safis
+// bgp/peer-groups/peer-group/use-multiple-paths/ibgp/state
+// bgp/peer-groups/peer-group/use-multiple-paths/ibgp/config
+// bgp/peer-groups/peer-group/use-multiple-paths/ibgp
+// bgp/peer-groups/peer-group/use-multiple-paths/ebgp/state
+// bgp/peer-groups/peer-group/use-multiple-paths/ebgp/config
+// bgp/peer-groups/peer-group/use-multiple-paths/ebgp
+// bgp/peer-groups/peer-group/use-multiple-paths/state
+// bgp/peer-groups/peer-group/use-multiple-paths/config
+// bgp/peer-groups/peer-group/use-multiple-paths
+// bgp/peer-groups/peer-group/add-paths/state
+// bgp/peer-groups/peer-group/add-paths/config
+// bgp/peer-groups/peer-group/add-paths
+// bgp/peer-groups/peer-group/as-path-options/state
+// bgp/peer-groups/peer-group/as-path-options/config
+// bgp/peer-groups/peer-group/as-path-options
+// bgp/peer-groups/peer-group/route-reflector/state
+// bgp/peer-groups/peer-group/route-reflector/config
+// bgp/peer-groups/peer-group/route-reflector
+// bgp/peer-groups/peer-group/ebgp-multihop/state
+// bgp/peer-groups/peer-group/ebgp-multihop/config
+// bgp/peer-groups/peer-group/ebgp-multihop
+// bgp/peer-groups/peer-group/logging-options/state
+// bgp/peer-groups/peer-group/logging-options/config
+// bgp/peer-groups/peer-group/logging-options
+// bgp/peer-groups/peer-group/graceful-restart/state
+// bgp/peer-groups/peer-group/graceful-restart/config
+// bgp/peer-groups/peer-group/graceful-restart
+// bgp/peer-groups/peer-group/error-handling/state
+// bgp/peer-groups/peer-group/error-handling/config
+// bgp/peer-groups/peer-group/error-handling
+// bgp/peer-groups/peer-group/transport/state
+// bgp/peer-groups/peer-group/transport/config
+// bgp/peer-groups/peer-group/transport
+// bgp/peer-groups/peer-group/timers/state
+// bgp/peer-groups/peer-group/timers/config
+// bgp/peer-groups/peer-group/timers
+// bgp/peer-groups/peer-group/state
+// bgp/peer-groups/peer-group/config
+// bgp/peer-groups/peer-group
+// bgp/peer-groups
+// bgp/neighbors/neighbor/afi-safis/afi-safi/use-multiple-paths/ebgp/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/use-multiple-paths/ebgp/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/use-multiple-paths/ebgp
+// bgp/neighbors/neighbor/afi-safis/afi-safi/use-multiple-paths/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/use-multiple-paths/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/use-multiple-paths
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l2vpn-evpn/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l2vpn-evpn/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l2vpn-evpn/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l2vpn-evpn
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l2vpn-vpls/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l2vpn-vpls/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l2vpn-vpls/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l2vpn-vpls
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv6-multicast/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv6-multicast/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv6-multicast/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv6-multicast
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv4-multicast/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv4-multicast/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv4-multicast/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv4-multicast
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv6-unicast/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv6-unicast/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv6-unicast/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv6-unicast
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv4-unicast/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv4-unicast/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv4-unicast/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/l3vpn-ipv4-unicast
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-labeled-unicast/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-labeled-unicast/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-labeled-unicast/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-labeled-unicast
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-labeled-unicast/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-labeled-unicast/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-labeled-unicast/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-labeled-unicast
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-unicast/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-unicast/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-unicast/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-unicast/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-unicast/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv6-unicast
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-unicast/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-unicast/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-unicast/prefix-limit/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-unicast/prefix-limit/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-unicast/prefix-limit
+// bgp/neighbors/neighbor/afi-safis/afi-safi/ipv4-unicast
+// bgp/neighbors/neighbor/afi-safis/afi-safi/graceful-restart/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/graceful-restart/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi/graceful-restart
+// bgp/neighbors/neighbor/afi-safis/afi-safi/state/prefixes
+// bgp/neighbors/neighbor/afi-safis/afi-safi/state
+// bgp/neighbors/neighbor/afi-safis/afi-safi/config
+// bgp/neighbors/neighbor/afi-safis/afi-safi
+// bgp/neighbors/neighbor/afi-safis
+// bgp/neighbors/neighbor/use-multiple-paths/ebgp/state
+// bgp/neighbors/neighbor/use-multiple-paths/ebgp/config
+// bgp/neighbors/neighbor/use-multiple-paths/ebgp
+// bgp/neighbors/neighbor/use-multiple-paths/state
+// bgp/neighbors/neighbor/use-multiple-paths/config
+// bgp/neighbors/neighbor/use-multiple-paths
+// bgp/neighbors/neighbor/add-paths/state
+// bgp/neighbors/neighbor/add-paths/config
+// bgp/neighbors/neighbor/add-paths
+// bgp/neighbors/neighbor/as-path-options/state
+// bgp/neighbors/neighbor/as-path-options/config
+// bgp/neighbors/neighbor/as-path-options
+// bgp/neighbors/neighbor/route-reflector/state
+// bgp/neighbors/neighbor/route-reflector/config
+// bgp/neighbors/neighbor/route-reflector
+// bgp/neighbors/neighbor/ebgp-multihop/state
+// bgp/neighbors/neighbor/ebgp-multihop/config
+// bgp/neighbors/neighbor/ebgp-multihop
+// bgp/neighbors/neighbor/logging-options/state
+// bgp/neighbors/neighbor/logging-options/config
+// bgp/neighbors/neighbor/logging-options
+// bgp/neighbors/neighbor/graceful-restart/state
+// bgp/neighbors/neighbor/graceful-restart/config
+// bgp/neighbors/neighbor/graceful-restart
+// bgp/neighbors/neighbor/error-handling/state
+// bgp/neighbors/neighbor/error-handling/config
+// bgp/neighbors/neighbor/error-handling
+// bgp/neighbors/neighbor/transport/state
+// bgp/neighbors/neighbor/transport/config
+// bgp/neighbors/neighbor/transport
+// bgp/neighbors/neighbor/timers/state
+// bgp/neighbors/neighbor/timers/config
+// bgp/neighbors/neighbor/timers
+// bgp/neighbors/neighbor/state/queues
+// bgp/neighbors/neighbor/state/messages/received
+// bgp/neighbors/neighbor/state/messages/sent
+// bgp/neighbors/neighbor/state/messages
+// bgp/neighbors/neighbor/state
+// bgp/neighbors/neighbor/config
+// bgp/neighbors/neighbor
+// bgp/neighbors
+// bgp/global/dynamic-neighbor-prefixes/dynamic-neighbor-prefix/state
+// bgp/global/dynamic-neighbor-prefixes/dynamic-neighbor-prefix/config
+// bgp/global/dynamic-neighbor-prefixes/dynamic-neighbor-prefix
+// bgp/global/dynamic-neighbor-prefixes
+// bgp/global/afi-safis/afi-safi/l2vpn-evpn/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/l2vpn-evpn/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/l2vpn-evpn/prefix-limit
+// bgp/global/afi-safis/afi-safi/l2vpn-evpn
+// bgp/global/afi-safis/afi-safi/l2vpn-vpls/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/l2vpn-vpls/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/l2vpn-vpls/prefix-limit
+// bgp/global/afi-safis/afi-safi/l2vpn-vpls
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv6-multicast/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv6-multicast/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv6-multicast/prefix-limit
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv6-multicast
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv4-multicast/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv4-multicast/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv4-multicast/prefix-limit
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv4-multicast
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv6-unicast/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv6-unicast/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv6-unicast/prefix-limit
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv6-unicast
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv4-unicast/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv4-unicast/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv4-unicast/prefix-limit
+// bgp/global/afi-safis/afi-safi/l3vpn-ipv4-unicast
+// bgp/global/afi-safis/afi-safi/ipv6-labeled-unicast/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/ipv6-labeled-unicast/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/ipv6-labeled-unicast/prefix-limit
+// bgp/global/afi-safis/afi-safi/ipv6-labeled-unicast
+// bgp/global/afi-safis/afi-safi/ipv4-labeled-unicast/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/ipv4-labeled-unicast/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/ipv4-labeled-unicast/prefix-limit
+// bgp/global/afi-safis/afi-safi/ipv4-labeled-unicast
+// bgp/global/afi-safis/afi-safi/ipv6-unicast/state
+// bgp/global/afi-safis/afi-safi/ipv6-unicast/config
+// bgp/global/afi-safis/afi-safi/ipv6-unicast/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/ipv6-unicast/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/ipv6-unicast/prefix-limit
+// bgp/global/afi-safis/afi-safi/ipv6-unicast
+// bgp/global/afi-safis/afi-safi/ipv4-unicast/state
+// bgp/global/afi-safis/afi-safi/ipv4-unicast/config
+// bgp/global/afi-safis/afi-safi/ipv4-unicast/prefix-limit/state
+// bgp/global/afi-safis/afi-safi/ipv4-unicast/prefix-limit/config
+// bgp/global/afi-safis/afi-safi/ipv4-unicast/prefix-limit
+// bgp/global/afi-safis/afi-safi/ipv4-unicast
+// bgp/global/afi-safis/afi-safi/use-multiple-paths/ibgp/state
+// bgp/global/afi-safis/afi-safi/use-multiple-paths/ibgp/config
+// bgp/global/afi-safis/afi-safi/use-multiple-paths/ibgp
+// bgp/global/afi-safis/afi-safi/use-multiple-paths/ebgp/state
+// bgp/global/afi-safis/afi-safi/use-multiple-paths/ebgp/config
+// bgp/global/afi-safis/afi-safi/use-multiple-paths/ebgp
+// bgp/global/afi-safis/afi-safi/use-multiple-paths/state
+// bgp/global/afi-safis/afi-safi/use-multiple-paths/config
+// bgp/global/afi-safis/afi-safi/use-multiple-paths
+// bgp/global/afi-safis/afi-safi/route-selection-options/state
+// bgp/global/afi-safis/afi-safi/route-selection-options/config
+// bgp/global/afi-safis/afi-safi/route-selection-options
+// bgp/global/afi-safis/afi-safi/graceful-restart/state
+// bgp/global/afi-safis/afi-safi/graceful-restart/config
+// bgp/global/afi-safis/afi-safi/graceful-restart
+// bgp/global/afi-safis/afi-safi/state
+// bgp/global/afi-safis/afi-safi/config
+// bgp/global/afi-safis/afi-safi
+// bgp/global/afi-safis
+// bgp/global/route-selection-options/state
+// bgp/global/route-selection-options/config
+// bgp/global/route-selection-options
+// bgp/global/use-multiple-paths/ibgp/state
+// bgp/global/use-multiple-paths/ibgp/config
+// bgp/global/use-multiple-paths/ibgp
+// bgp/global/use-multiple-paths/ebgp/state
+// bgp/global/use-multiple-paths/ebgp/config
+// bgp/global/use-multiple-paths/ebgp
+// bgp/global/use-multiple-paths/state
+// bgp/global/use-multiple-paths/config
+// bgp/global/use-multiple-paths
+// bgp/global/graceful-restart/state
+// bgp/global/graceful-restart/config
+// bgp/global/graceful-restart
+// bgp/global/confederation/state
+// bgp/global/confederation/config
+// bgp/global/confederation
+// bgp/global/default-route-distance/state
+// bgp/global/default-route-distance/config
+// bgp/global/default-route-distance
+// bgp/global/state
+// bgp/global/config
+// bgp/global
+// bgp
+
+message PrefixLimitState {
+    uint32 max_prefixes = 1;
+    bool prevent_teardown = 2;
+    None shutdown_threshold_pct = 3;
+    None restart_timer = 4;
+}
+
+message PrefixLimitConfig {
+    uint32 max_prefixes = 1;
+    bool prevent_teardown = 2;
+    None shutdown_threshold_pct = 3;
+    None restart_timer = 4;
+}
+
+message L2vpnEvpnPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiL2vpnEvpn {
+    L2vpnEvpnPrefixLimit prefix_limit = 1;
+}
+
+message L2vpnVplsPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiL2vpnVpls {
+    L2vpnVplsPrefixLimit prefix_limit = 1;
+}
+
+message L3vpnIpv6MulticastPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiL3vpnIpv6Multicast {
+    L3vpnIpv6MulticastPrefixLimit prefix_limit = 1;
+}
+
+message L3vpnIpv4MulticastPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiL3vpnIpv4Multicast {
+    L3vpnIpv4MulticastPrefixLimit prefix_limit = 1;
+}
+
+message L3vpnIpv6UnicastPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiL3vpnIpv6Unicast {
+    L3vpnIpv6UnicastPrefixLimit prefix_limit = 1;
+}
+
+message L3vpnIpv4UnicastPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiL3vpnIpv4Unicast {
+    L3vpnIpv4UnicastPrefixLimit prefix_limit = 1;
+}
+
+message Ipv6LabeledUnicastPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiIpv6LabeledUnicast {
+    Ipv6LabeledUnicastPrefixLimit prefix_limit = 1;
+}
+
+message Ipv4LabeledUnicastPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiIpv4LabeledUnicast {
+    Ipv4LabeledUnicastPrefixLimit prefix_limit = 1;
+}
+
+message Ipv6UnicastState {
+    bool send_default_route = 1;
+}
+
+message Ipv6UnicastConfig {
+    bool send_default_route = 1;
+}
+
+message Ipv6UnicastPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiIpv6Unicast {
+    Ipv6UnicastPrefixLimit prefix_limit = 1;
+    Ipv6UnicastConfig config = 2;
+    Ipv6UnicastState state = 3;
+}
+
+message Ipv4UnicastState {
+    bool send_default_route = 1;
+}
+
+message Ipv4UnicastConfig {
+    bool send_default_route = 1;
+}
+
+message Ipv4UnicastPrefixLimit {
+    PrefixLimitConfig config = 1;
+    PrefixLimitState state = 2;
+}
+
+message AfiSafiIpv4Unicast {
+    Ipv4UnicastPrefixLimit prefix_limit = 1;
+    Ipv4UnicastConfig config = 2;
+    Ipv4UnicastState state = 3;
+}
+
+message IbgpState {
+    uint32 maximum_paths = 1;
+}
+
+message IbgpConfig {
+    uint32 maximum_paths = 1;
+}
+
+message UseMultiplePathsIbgp {
+    IbgpConfig config = 1;
+    IbgpState state = 2;
+}
+
+message EbgpState {
+    bool allow_multiple_as = 1;
+    uint32 maximum_paths = 2;
+}
+
+message EbgpConfig {
+    bool allow_multiple_as = 1;
+    uint32 maximum_paths = 2;
+}
+
+message UseMultiplePathsEbgp {
+    EbgpConfig config = 1;
+    EbgpState state = 2;
+}
+
+message UseMultiplePathsState {
+    bool enabled = 1;
+}
+
+message UseMultiplePathsConfig {
+    bool enabled = 1;
+}
+
+message AfiSafiUseMultiplePaths {
+    UseMultiplePathsConfig config = 1;
+    UseMultiplePathsState state = 2;
+    UseMultiplePathsEbgp ebgp = 3;
+    UseMultiplePathsIbgp ibgp = 4;
+}
+
+message RouteSelectionOptionsState {
+    bool always_compare_med = 1;
+    bool ignore_as_path_length = 2;
+    bool external_compare_router_id = 3;
+    bool advertise_inactive_routes = 4;
+    bool enable_aigp = 5;
+    bool ignore_next_hop_igp_metric = 6;
+}
+
+message RouteSelectionOptionsConfig {
+    bool always_compare_med = 1;
+    bool ignore_as_path_length = 2;
+    bool external_compare_router_id = 3;
+    bool advertise_inactive_routes = 4;
+    bool enable_aigp = 5;
+    bool ignore_next_hop_igp_metric = 6;
+}
+
+message AfiSafiRouteSelectionOptions {
+    RouteSelectionOptionsConfig config = 1;
+    RouteSelectionOptionsState state = 2;
+}
+
+message GracefulRestartState {
+    bool enabled = 1;
+}
+
+message GracefulRestartConfig {
+    bool enabled = 1;
+}
+
+message AfiSafiGracefulRestart {
+    GracefulRestartConfig config = 1;
+    GracefulRestartState state = 2;
+}
+
+message AfiSafiState {
+    string afi_safi_name = 1;
+    bool enabled = 2;
+}
+
+message AfiSafiConfig {
+    string afi_safi_name = 1;
+    bool enabled = 2;
+}
+
+message AfiSafisAfiSafi {
+    AfiSafiConfig config = 1;
+    AfiSafiState state = 2;
+    AfiSafiGracefulRestart graceful_restart = 3;
+    AfiSafiRouteSelectionOptions route_selection_options = 4;
+    AfiSafiUseMultiplePaths use_multiple_paths = 5;
+    AfiSafiIpv4Unicast ipv4_unicast = 6;
+    AfiSafiIpv6Unicast ipv6_unicast = 7;
+    AfiSafiIpv4LabeledUnicast ipv4_labeled_unicast = 8;
+    AfiSafiIpv6LabeledUnicast ipv6_labeled_unicast = 9;
+    AfiSafiL3vpnIpv4Unicast l3vpn_ipv4_unicast = 10;
+    AfiSafiL3vpnIpv6Unicast l3vpn_ipv6_unicast = 11;
+    AfiSafiL3vpnIpv4Multicast l3vpn_ipv4_multicast = 12;
+    AfiSafiL3vpnIpv6Multicast l3vpn_ipv6_multicast = 13;
+    AfiSafiL2vpnVpls l2vpn_vpls = 14;
+    AfiSafiL2vpnEvpn l2vpn_evpn = 15;
+}
+
+message PeerGroupAfiSafis {
+    repeated AfiSafisAfiSafi afi_safi = 1;
+}
+
+message PeerGroupUseMultiplePaths {
+    UseMultiplePathsConfig config = 1;
+    UseMultiplePathsState state = 2;
+    UseMultiplePathsEbgp ebgp = 3;
+    UseMultiplePathsIbgp ibgp = 4;
+}
+
+message AddPathsState {
+    bool receive = 1;
+    None send_max = 2;
+}
+
+message AddPathsConfig {
+    bool receive = 1;
+    None send_max = 2;
+}
+
+message PeerGroupAddPaths {
+    AddPathsConfig config = 1;
+    AddPathsState state = 2;
+}
+
+message AsPathOptionsState {
+    None allow_own_as = 1;
+    bool replace_peer_as = 2;
+}
+
+message AsPathOptionsConfig {
+    None allow_own_as = 1;
+    bool replace_peer_as = 2;
+}
+
+message PeerGroupAsPathOptions {
+    AsPathOptionsConfig config = 1;
+    AsPathOptionsState state = 2;
+}
+
+message RouteReflectorState {
+    None route_reflector_cluster_id = 1;
+    bool route_reflector_client = 2;
+}
+
+message RouteReflectorConfig {
+    None route_reflector_cluster_id = 1;
+    bool route_reflector_client = 2;
+}
+
+message PeerGroupRouteReflector {
+    RouteReflectorConfig config = 1;
+    RouteReflectorState state = 2;
+}
+
+message EbgpMultihopState {
+    bool enabled = 1;
+    None multihop_ttl = 2;
+}
+
+message EbgpMultihopConfig {
+    bool enabled = 1;
+    None multihop_ttl = 2;
+}
+
+message PeerGroupEbgpMultihop {
+    EbgpMultihopConfig config = 1;
+    EbgpMultihopState state = 2;
+}
+
+message LoggingOptionsState {
+    bool log_neighbor_state_changes = 1;
+}
+
+message LoggingOptionsConfig {
+    bool log_neighbor_state_changes = 1;
+}
+
+message PeerGroupLoggingOptions {
+    LoggingOptionsConfig config = 1;
+    LoggingOptionsState state = 2;
+}
+
+message GracefulRestartState {
+    bool enabled = 1;
+    uint32 restart_time = 2;
+    None stale_routes_time = 3;
+    bool helper_only = 4;
+}
+
+message GracefulRestartConfig {
+    bool enabled = 1;
+    uint32 restart_time = 2;
+    None stale_routes_time = 3;
+    bool helper_only = 4;
+}
+
+message PeerGroupGracefulRestart {
+    GracefulRestartConfig config = 1;
+    GracefulRestartState state = 2;
+}
+
+message ErrorHandlingState {
+    bool treat_as_withdraw = 1;
+}
+
+message ErrorHandlingConfig {
+    bool treat_as_withdraw = 1;
+}
+
+message PeerGroupErrorHandling {
+    ErrorHandlingConfig config = 1;
+    ErrorHandlingState state = 2;
+}
+
+message TransportState {
+    uint32 tcp_mss = 1;
+    bool mtu_discovery = 2;
+    bool passive_mode = 3;
+    None local_address = 4;
+}
+
+message TransportConfig {
+    uint32 tcp_mss = 1;
+    bool mtu_discovery = 2;
+    bool passive_mode = 3;
+    None local_address = 4;
+}
+
+message PeerGroupTransport {
+    TransportConfig config = 1;
+    TransportState state = 2;
+}
+
+message TimersState {
+    None connect_retry = 1;
+    None hold_time = 2;
+    None keepalive_interval = 3;
+    None minimum_advertisement_interval = 4;
+}
+
+message TimersConfig {
+    None connect_retry = 1;
+    None hold_time = 2;
+    None keepalive_interval = 3;
+    None minimum_advertisement_interval = 4;
+}
+
+message PeerGroupTimers {
+    TimersConfig config = 1;
+    TimersState state = 2;
+}
+
+message PeerGroupState {
+    string peer_group_name = 1;
+    None peer_as = 2;
+    None local_as = 3;
+    None peer_type = 4;
+    None auth_password = 5;
+    None remove_private_as = 6;
+    bool route_flap_damping = 7;
+    None send_community = 8;
+    string description = 9;
+    uint32 total_paths = 10;
+    uint32 total_prefixes = 11;
+}
+
+message PeerGroupConfig {
+    string peer_group_name = 1;
+    None peer_as = 2;
+    None local_as = 3;
+    None peer_type = 4;
+    None auth_password = 5;
+    None remove_private_as = 6;
+    bool route_flap_damping = 7;
+    None send_community = 8;
+    string description = 9;
+}
+
+message PeerGroupsPeerGroup {
+    PeerGroupConfig config = 1;
+    PeerGroupState state = 2;
+    PeerGroupTimers timers = 3;
+    PeerGroupTransport transport = 4;
+    PeerGroupErrorHandling error_handling = 5;
+    PeerGroupGracefulRestart graceful_restart = 6;
+    PeerGroupLoggingOptions logging_options = 7;
+    PeerGroupEbgpMultihop ebgp_multihop = 8;
+    PeerGroupRouteReflector route_reflector = 9;
+    PeerGroupAsPathOptions as_path_options = 10;
+    PeerGroupAddPaths add_paths = 11;
+    PeerGroupUseMultiplePaths use_multiple_paths = 12;
+    PeerGroupAfiSafis afi_safis = 13;
+}
+
+message BgpPeerGroups {
+    repeated PeerGroupsPeerGroup peer_group = 1;
+}
+
+message EbgpState {
+    bool allow_multiple_as = 1;
+}
+
+message EbgpConfig {
+    bool allow_multiple_as = 1;
+}
+
+message AfiSafiUseMultiplePaths {
+    UseMultiplePathsConfig config = 1;
+    UseMultiplePathsState state = 2;
+    UseMultiplePathsEbgp ebgp = 3;
+}
+
+message GracefulRestartState {
+    bool enabled = 1;
+    bool received = 2;
+    bool advertised = 3;
+}
+
+message StatePrefixes {
+    uint32 received = 1;
+    uint32 sent = 2;
+    uint32 installed = 3;
+}
+
+message AfiSafiState {
+    string afi_safi_name = 1;
+    bool enabled = 2;
+    bool active = 3;
+    StatePrefixes prefixes = 4;
+}
+
+message AfiSafisAfiSafi {
+    AfiSafiConfig config = 1;
+    AfiSafiState state = 2;
+    AfiSafiGracefulRestart graceful_restart = 3;
+    AfiSafiIpv4Unicast ipv4_unicast = 4;
+    AfiSafiIpv6Unicast ipv6_unicast = 5;
+    AfiSafiIpv4LabeledUnicast ipv4_labeled_unicast = 6;
+    AfiSafiIpv6LabeledUnicast ipv6_labeled_unicast = 7;
+    AfiSafiL3vpnIpv4Unicast l3vpn_ipv4_unicast = 8;
+    AfiSafiL3vpnIpv6Unicast l3vpn_ipv6_unicast = 9;
+    AfiSafiL3vpnIpv4Multicast l3vpn_ipv4_multicast = 10;
+    AfiSafiL3vpnIpv6Multicast l3vpn_ipv6_multicast = 11;
+    AfiSafiL2vpnVpls l2vpn_vpls = 12;
+    AfiSafiL2vpnEvpn l2vpn_evpn = 13;
+    AfiSafiUseMultiplePaths use_multiple_paths = 14;
+}
+
+message NeighborAfiSafis {
+    repeated AfiSafisAfiSafi afi_safi = 1;
+}
+
+message NeighborUseMultiplePaths {
+    UseMultiplePathsConfig config = 1;
+    UseMultiplePathsState state = 2;
+    UseMultiplePathsEbgp ebgp = 3;
+}
+
+message NeighborAddPaths {
+    AddPathsConfig config = 1;
+    AddPathsState state = 2;
+}
+
+message NeighborAsPathOptions {
+    AsPathOptionsConfig config = 1;
+    AsPathOptionsState state = 2;
+}
+
+message NeighborRouteReflector {
+    RouteReflectorConfig config = 1;
+    RouteReflectorState state = 2;
+}
+
+message NeighborEbgpMultihop {
+    EbgpMultihopConfig config = 1;
+    EbgpMultihopState state = 2;
+}
+
+message NeighborLoggingOptions {
+    LoggingOptionsConfig config = 1;
+    LoggingOptionsState state = 2;
+}
+
+message GracefulRestartState {
+    bool enabled = 1;
+    uint32 restart_time = 2;
+    None stale_routes_time = 3;
+    bool helper_only = 4;
+    uint32 peer_restart_time = 5;
+    bool peer_restarting = 6;
+    bool local_restarting = 7;
+    enum Mode {
+        MODE_HELPER_ONLY = 0;
+        MODE_BILATERAL = 1;
+        MODE_REMOTE_HELPER = 2;
+    }
+    Mode mode = 8;
+}
+
+message NeighborGracefulRestart {
+    GracefulRestartConfig config = 1;
+    GracefulRestartState state = 2;
+}
+
+message ErrorHandlingState {
+    bool treat_as_withdraw = 1;
+    uint32 erroneous_update_messages = 2;
+}
+
+message NeighborErrorHandling {
+    ErrorHandlingConfig config = 1;
+    ErrorHandlingState state = 2;
+}
+
+message TransportState {
+    uint32 tcp_mss = 1;
+    bool mtu_discovery = 2;
+    bool passive_mode = 3;
+    None local_address = 4;
+    None local_port = 5;
+    None remote_address = 6;
+    None remote_port = 7;
+}
+
+message NeighborTransport {
+    TransportConfig config = 1;
+    TransportState state = 2;
+}
+
+message TimersState {
+    None connect_retry = 1;
+    None hold_time = 2;
+    None keepalive_interval = 3;
+    None minimum_advertisement_interval = 4;
+    None negotiated_hold_time = 5;
+}
+
+message NeighborTimers {
+    TimersConfig config = 1;
+    TimersState state = 2;
+}
+
+message StateQueues {
+    uint32 input = 1;
+    uint32 output = 2;
+}
+
+message MessagesReceived {
+    uint64 UPDATE = 1;
+    uint64 NOTIFICATION = 2;
+}
+
+message MessagesSent {
+    uint64 UPDATE = 1;
+    uint64 NOTIFICATION = 2;
+}
+
+message StateMessages {
+    MessagesSent sent = 1;
+    MessagesReceived received = 2;
+}
+
+message NeighborState {
+    None neighbor_address = 1;
+    bool enabled = 2;
+    None peer_as = 3;
+    None local_as = 4;
+    None peer_type = 5;
+    None auth_password = 6;
+    None remove_private_as = 7;
+    bool route_flap_damping = 8;
+    None send_community = 9;
+    string description = 10;
+    enum SessionState {
+        SESSION_STATE_IDLE = 0;
+        SESSION_STATE_CONNECT = 1;
+        SESSION_STATE_ACTIVE = 2;
+        SESSION_STATE_OPENSENT = 3;
+        SESSION_STATE_OPENCONFIRM = 4;
+        SESSION_STATE_ESTABLISHED = 5;
+    }
+    SessionState session_state = 11;
+    None last_established = 12;
+    None established_transitions = 13;
+    string supported_capabilities = 14;
+    StateMessages messages = 15;
+    StateQueues queues = 16;
+    bool dynamically_configured = 17;
+}
+
+message NeighborConfig {
+    None neighbor_address = 1;
+    bool enabled = 2;
+    None peer_as = 3;
+    None local_as = 4;
+    None peer_type = 5;
+    None auth_password = 6;
+    None remove_private_as = 7;
+    bool route_flap_damping = 8;
+    None send_community = 9;
+    string description = 10;
+}
+
+message NeighborsNeighbor {
+    NeighborConfig config = 1;
+    NeighborState state = 2;
+    NeighborTimers timers = 3;
+    NeighborTransport transport = 4;
+    NeighborErrorHandling error_handling = 5;
+    NeighborGracefulRestart graceful_restart = 6;
+    NeighborLoggingOptions logging_options = 7;
+    NeighborEbgpMultihop ebgp_multihop = 8;
+    NeighborRouteReflector route_reflector = 9;
+    NeighborAsPathOptions as_path_options = 10;
+    NeighborAddPaths add_paths = 11;
+    NeighborUseMultiplePaths use_multiple_paths = 12;
+    NeighborAfiSafis afi_safis = 13;
+}
+
+message BgpNeighbors {
+    repeated NeighborsNeighbor neighbor = 1;
+}
+
+message DynamicNeighborPrefixState {
+    None prefix = 1;
+}
+
+message DynamicNeighborPrefixConfig {
+    None prefix = 1;
+}
+
+message DynamicNeighborPrefixesDynamicNeighborPrefix {
+    DynamicNeighborPrefixConfig config = 1;
+    DynamicNeighborPrefixState state = 2;
+}
+
+message GlobalDynamicNeighborPrefixes {
+    repeated DynamicNeighborPrefixesDynamicNeighborPrefix dynamic_neighbor_prefix = 1;
+}
+
+message AfiSafiState {
+    string afi_safi_name = 1;
+    bool enabled = 2;
+    uint32 total_paths = 3;
+    uint32 total_prefixes = 4;
+}
+
+message GlobalAfiSafis {
+    repeated AfiSafisAfiSafi afi_safi = 1;
+}
+
+message GlobalRouteSelectionOptions {
+    RouteSelectionOptionsConfig config = 1;
+    RouteSelectionOptionsState state = 2;
+}
+
+message GlobalUseMultiplePaths {
+    UseMultiplePathsConfig config = 1;
+    UseMultiplePathsState state = 2;
+    UseMultiplePathsEbgp ebgp = 3;
+    UseMultiplePathsIbgp ibgp = 4;
+}
+
+message GlobalGracefulRestart {
+    GracefulRestartConfig config = 1;
+    GracefulRestartState state = 2;
+}
+
+message ConfederationState {
+    bool enabled = 1;
+    None identifier = 2;
+    None member_as = 3;
+}
+
+message ConfederationConfig {
+    bool enabled = 1;
+    None identifier = 2;
+    None member_as = 3;
+}
+
+message GlobalConfederation {
+    ConfederationConfig config = 1;
+    ConfederationState state = 2;
+}
+
+message DefaultRouteDistanceState {
+    None external_route_distance = 1;
+    None internal_route_distance = 2;
+}
+
+message DefaultRouteDistanceConfig {
+    None external_route_distance = 1;
+    None internal_route_distance = 2;
+}
+
+message GlobalDefaultRouteDistance {
+    DefaultRouteDistanceConfig config = 1;
+    DefaultRouteDistanceState state = 2;
+}
+
+message GlobalState {
+    None as = 1;
+    None router_id = 2;
+    uint32 total_paths = 3;
+    uint32 total_prefixes = 4;
+}
+
+message GlobalConfig {
+    None as = 1;
+    None router_id = 2;
+}
+
+message BgpGlobal {
+    GlobalConfig config = 1;
+    GlobalState state = 2;
+    GlobalDefaultRouteDistance default_route_distance = 3;
+    GlobalConfederation confederation = 4;
+    GlobalGracefulRestart graceful_restart = 5;
+    GlobalUseMultiplePaths use_multiple_paths = 6;
+    GlobalRouteSelectionOptions route_selection_options = 7;
+    GlobalAfiSafis afi_safis = 8;
+    GlobalDynamicNeighborPrefixes dynamic_neighbor_prefixes = 9;
+}
+
+message Bgp {
+    BgpGlobal global = 1;
+    BgpNeighbors neighbors = 2;
+    BgpPeerGroups peer_groups = 3;
+}
+

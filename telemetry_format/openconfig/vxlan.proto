@@ -1,0 +1,71 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+package proto.vxlan;
+
+message EntriesEntry {
+    uint32 id = 1;
+    bytes mac_address = 2;
+    enum EntryType {
+        ENTRY_TYPE_STATIC = 0;
+        ENTRY_TYPE_DYNAMIC = 1;
+    }
+    EntryType entry_type = 3;
+    string interface = 4;
+}
+
+message MacTableEntries {
+    repeated EntriesEntry entry = 1;
+}
+
+message FdbMacTable {
+    MacTableEntries entries = 1;
+}
+
+message AccessPort {
+    string interface = 1;
+    string mode = 2;
+    uint32 id = 3;
+} 
+
+message AccessPorts {
+    repeated AccessPort ac_port = 1;
+}
+
+message TunnelInterfaces {
+    repeated string ac_port = 1;
+}
+
+message VniEntry {
+    uint32 id = 1;
+    string description = 2;
+    bool bum_flooding = 3;
+    AccessPorts ac_ports = 4;
+    TunnelInterfaces tunnel_interfacs = 5;
+}
+
+message VniEntries {
+    repeated VniEntry entry = 1;
+}
+
+message VxlanVni {
+    VniEntries entries = 1;
+}
+
+message Vxlan {
+    FdbMacTable mac_table = 3;
+}
+

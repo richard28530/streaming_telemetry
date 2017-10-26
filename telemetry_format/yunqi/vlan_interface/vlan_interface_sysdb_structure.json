@@ -1,0 +1,21 @@
+# vim:set ft=json: 
+{
+    "vlan_interface" : {
+        "interface" : [
+            {
+                "vlan10" : {
+                    "description" : "",
+                    "mtu" : 1 ,
+                    "address" : [
+                        {
+                            "11.11.11.1" : {
+                                "prefix_length" : 24
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
+

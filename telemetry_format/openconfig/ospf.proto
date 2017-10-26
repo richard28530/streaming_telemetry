@@ -1,0 +1,210 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+syntax = "proto3";
+
+package proto.ospf;
+
+// Paths:
+// /ospfv2/areas/
+// /ospfv2/areas/config
+// /ospfv2/areas/state
+// /ospfv2/areas/interfaces
+// /ospfv2/global/config
+// /ospfv2/global/state
+// /ospfv2/policies/
+
+message AreaConfig {
+    string identifier = 1;
+}
+
+message LsaState {
+    string link_state_id = 1;
+    string advertising_router = 2;
+    uint32 sequence_number = 3;
+    uint32 checksum = 4;
+    uint32 age = 5;
+} 
+
+message LinkSpec {
+    uint32 link_id = 1;
+    uint32 link_data = 2;
+}
+
+message LsaTosMetricState {
+    uint32 tos = 1;
+    uint32 metric = 2;
+}
+
+message RouterLsa {
+    LsaState state = 1;
+    uint32 type = 2;
+    LinkSpec link = 3;
+    uint32 metric = 4;
+    uint32 number_links = 5;
+    uint32 number_to_metrics = 6;
+}
+
+message RouterLsas {
+    repeated RouterLsa lsas = 1;
+}
+
+message NetworkLsa {
+    LsaState state = 1;
+    uint32 network_mask = 2;
+    repeated string attached_router = 3;
+}
+
+message NetworkLsas {
+    repeated NetworkLsa lsas = 1;
+}
+
+message SummaryLsa {
+    LsaState state = 1;
+    uint32 network_mask = 2;
+    LsaTosMetricState tos_metric = 3;
+}
+
+message SummaryLsas {
+    repeated SummaryLsa lsas = 1;
+}
+
+message AsExternalLsa {
+    LsaState state = 1;
+    uint32 mask = 2;
+    uint32 metric_type = 3;
+    uint32 metric = 4;
+    string forwarding_address = 5;
+    string external_route_tag = 6;
+}
+
+message AsExternalLsas {
+    repeated AsExternalLsa lsas = 1;
+}
+
+message NssaExternalLsa {
+    LsaState state = 1;
+    uint32 mask = 2;
+    uint32 metric_type = 3;
+    uint32 metric = 4;
+    string forwarding_address = 5;
+    string external_route_tag = 6;
+    bool propgate = 7;
+    LsaTosMetricState tos_metric = 8;
+}
+
+message NssaExternalLsas {
+    repeated NssaExternalLsa lsas = 1;
+}
+
+message Lsdb {
+    RouterLsas router_lsas = 1;
+    NetworkLsas network_lsas = 2;
+    SummaryLsas summary_lsas = 3;
+    AsExternalLsas as_external_lsas = 4;
+    NssaExternalLsas nssa_external_lsas = 5;
+}
+
+message InterfaceNeighborState {
+    uint32 priority = 1;
+    uint64 dead_time = 2;
+    string designated_router = 3;
+    string backup_designated_router = 4;
+    string optional_capability = 5;
+    uint32 last_established_time = 6;
+    string adjacency_state = 7;
+    uint32 state_changes = 8;
+    uint32 retransmission_queue_length = 9;
+}
+
+message SubInterface {
+    string id = 1;
+    string addresss = 2;
+}
+
+message InterfaceConfig {
+    string id = 1;
+    bool enabled = 2;
+    string network_type = 3;
+    uint32 priority = 4;
+    bool multi_area_adjacency_primary = 5;
+    string authentication_type = 6;
+    uint32 metric = 7;
+    bool passive = 8;
+    bool hidden_network = 9;
+    string addresss = 10;
+    repeated SubInterface sub_interfaces = 11;
+}
+
+message AreaInterface {
+    InterfaceConfig config = 1;
+    InterfaceConfig state = 2;
+    InterfaceNeighborState neighbor_state = 3;
+}
+
+message AreaInterfaces {
+    repeated AreaInterface interfaces = 1;
+}
+
+message VirtualLinkConfig {
+    string remote_router_id = 1;
+    InterfaceNeighborState neighbor_state = 2;
+}
+
+message VirtualLinkState {
+    string remote_router_id = 1;
+}
+
+message VirtualLink {
+    VirtualLinkConfig config = 1;
+    VirtualLinkState state = 2;
+}
+
+message VirtualLinks {
+    repeated VirtualLink vlinks = 1;
+}
+
+message OspfArea {
+    AreaConfig config = 1;
+    AreaConfig state = 2;
+    Lsdb lsdb = 3;
+    AreaInterfaces interfaces = 4;
+    VirtualLinks vlinks = 5;
+}
+
+message GlobalConfig {
+    string router_id = 1;
+    string summary_route_cost_mode = 2;
+    string igp_shortcuts = 3;
+    string log_adjacency_changes = 4;
+    string hide_transit_only_networks = 5;
+}
+
+message PropagationPolicies {
+    string import_policy = 1;
+    string export_policy = 2;
+}
+
+message OspfGlobal {
+    GlobalConfig config = 1;
+    GlobalConfig state = 2;
+    PropagationPolicies policies = 3;
+}
+
+message Ospfv2 {
+    OspfArea area = 1;
+    OspfGlobal global = 2;
+}
+

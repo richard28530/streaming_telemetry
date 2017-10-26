@@ -1,0 +1,140 @@
+# vim:set ft=json: 
+{
+    "firewall": {
+        "term" : [
+            {
+                "t1" : {
+                    "dest_mac" : [
+                    ],
+                    "source_mac" : [
+                    ],
+                    "dest_ipv4" : [
+                    ],
+                    "source_ipv4" : [
+                    ],
+                    "l4_dest_port" : {
+                        "number" : [
+                        ],
+                        "range" : [
+                        ],
+                        "name" : [
+                        ]
+                    },
+                    "l4_source_port" : {
+                        "number" : [
+                        ],
+                        "range" : [
+                        ],
+                        "name" : [
+                        ]
+                    },
+                    "protocol" : {
+                        "number" : [
+                        ],
+                        "name" : [
+                        ]
+                    },
+                    "ether_type" : {
+                        "number" : [
+                        ],
+                        "name" : [
+                        ]
+                    },
+                    "vlan" : [
+                        "number" : [
+                        ]
+                    ],
+                    "cos" : [
+                        "value" : [
+                        ]
+                    ],
+                    "dscp" : [
+                        "value" : [
+                        ]
+                    ],
+                    "tcp_flag" : [
+                    ]
+                }
+            }
+        ],
+        "filter" : [
+            {
+                "f1" : {
+                    "matching" : {
+                        "term" : [
+                            {
+                                "t1" : {
+                                    "action" : "discard"
+                                }
+                            }
+                        ],
+                        "counter" : [
+                            1111,
+                            324324
+                        ]
+                    },
+                    "input" : {
+                        "gigabit_ethernet" : [
+                            "te-1/1/1",
+                            "te-1/1/11"
+                        ],
+                        "vlan_interface": [
+                            "vlan1",
+                            "vlan2"
+                        ]
+                    },
+                    "outout" : {
+                        "gigabit_ethernet" : [
+                            "te-1/1/1",
+                            "te-1/1/11"
+                        ],
+                        "vlan_interface": [
+                            "vlan1",
+                            "vlan2"
+                        ]
+                    }
+                }
+            }
+        ],
+        "forwarder" : [
+            {
+                "f1" : {
+                    "match_mode" : "matched",
+                    "matching" : {
+                        "term" : [
+                            "t1",
+                            "t2"
+                        ],
+                        "counter" : [
+                            1112312,
+                            123123
+                        ]
+                    },
+                    "action" : {
+                        "switching" : {
+                        },
+                        "mirroring" : {
+                        },
+                        "classifying" : {
+                        },
+                        "policing" : {
+                        },
+                        "routing" : {
+                        }
+                    },
+                    "input" : {
+                        "gigabit_ethernet" : [
+                            "te-1/1/1",
+                            "te-1/1/11"
+                        ],
+                        "vlan_interface": [
+                            "vlan1",
+                            "vlan2"
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+}
+

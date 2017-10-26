@@ -1,0 +1,19 @@
+# vim:set ft=json: 
+{
+    "vsi" : {
+        "vsi_id" : [
+            {
+                "1" : {
+                    "description" : "",
+                    "vni" : 1,
+                    "tunnel_ethernet" : [
+                    ],
+                    "flooding" : {
+                        "enable" : true
+                    }
+                }
+            }
+        ]
+    }
+}
+

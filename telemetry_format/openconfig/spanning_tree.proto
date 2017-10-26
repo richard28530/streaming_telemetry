@@ -1,0 +1,287 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+//import "openconfig-spanning-tree-types.proto";
+//import "openconfig-interfaces.proto";
+//import "openconfig-vlan-types.proto";
+//import "ietf-yang-types.proto";
+//import "openconfig-extensions.proto";
+
+package proto.spanning_tree;
+
+// Paths:
+// stp/interfaces/interface/state
+// stp/interfaces/interface/config
+// stp/interfaces/interface
+// stp/interfaces
+// stp/rapid-pvst/vlan/interfaces/interface/state/counters
+// stp/rapid-pvst/vlan/interfaces/interface/state
+// stp/rapid-pvst/vlan/interfaces/interface/config
+// stp/rapid-pvst/vlan/interfaces/interface
+// stp/rapid-pvst/vlan/interfaces
+// stp/rapid-pvst/vlan/state
+// stp/rapid-pvst/vlan/config
+// stp/rapid-pvst/vlan
+// stp/rapid-pvst
+// stp/mstp/mst-instances/mst-instance/interfaces/interface/state/counters
+// stp/mstp/mst-instances/mst-instance/interfaces/interface/state
+// stp/mstp/mst-instances/mst-instance/interfaces/interface/config
+// stp/mstp/mst-instances/mst-instance/interfaces/interface
+// stp/mstp/mst-instances/mst-instance/interfaces
+// stp/mstp/mst-instances/mst-instance/state
+// stp/mstp/mst-instances/mst-instance/config
+// stp/mstp/mst-instances/mst-instance
+// stp/mstp/mst-instances
+// stp/mstp/state
+// stp/mstp/config
+// stp/mstp
+// stp/rstp/interfaces/interface/state/counters
+// stp/rstp/interfaces/interface/state
+// stp/rstp/interfaces/interface/config
+// stp/rstp/interfaces/interface
+// stp/rstp/interfaces
+// stp/rstp/state
+// stp/rstp/config
+// stp/rstp
+// stp/global/state
+// stp/global/config
+// stp/global
+// stp
+
+message InterfaceState {
+    None name = 1;
+    string edge_port = 2;
+    None link_type = 3;
+    None guard = 4;
+    bool bpdu_guard = 5;
+    bool bpdu_filter = 6;
+}
+
+message InterfaceConfig {
+    None name = 1;
+    string edge_port = 2;
+    None link_type = 3;
+    None guard = 4;
+    bool bpdu_guard = 5;
+    bool bpdu_filter = 6;
+}
+
+message InterfacesInterface {
+    InterfaceConfig config = 1;
+    InterfaceState state = 2;
+}
+
+message StpInterfaces {
+    repeated InterfacesInterface interface = 1;
+}
+
+message StateCounters {
+    uint64 bpdu_sent = 1;
+    uint64 bpdu_received = 2;
+}
+
+message InterfaceState {
+    None name = 1;
+    uint32 cost = 2;
+    None port_priority = 3;
+    uint32 port_num = 4;
+    string role = 5;
+    string port_state = 6;
+    None designated_root_priority = 7;
+    None designated_root_address = 8;
+    uint32 designated_cost = 9;
+    None designated_bridge_priority = 10;
+    None designated_bridge_address = 11;
+    None designated_port_priority = 12;
+    uint32 designated_port_num = 13;
+    uint64 forward_transisitions = 14;
+    StateCounters counters = 15;
+}
+
+message InterfaceConfig {
+    None name = 1;
+    uint32 cost = 2;
+    None port_priority = 3;
+}
+
+message VlanInterfaces {
+    repeated InterfacesInterface interface = 1;
+}
+
+message VlanState {
+    None hello_time = 1;
+    None max_age = 2;
+    None forwarding_delay = 3;
+    None hold_count = 4;
+    None bridge_priority = 5;
+    None bridge_address = 6;
+    None designated_root_priority = 7;
+    None designated_root_address = 8;
+    uint32 root_port = 9;
+    uint32 root_cost = 10;
+    None hold_time = 11;
+    uint64 topology_changes = 12;
+    None time_since_topology_change = 13;
+}
+
+message VlanConfig {
+    None vlan_id = 1;
+    None hello_time = 2;
+    None max_age = 3;
+    None forwarding_delay = 4;
+    None hold_count = 5;
+    None bridge_priority = 6;
+}
+
+message RapidPvstVlan {
+    VlanConfig config = 1;
+    VlanState state = 2;
+    VlanInterfaces interfaces = 3;
+}
+
+message StpRapidPvst {
+    repeated RapidPvstVlan vlan = 1;
+}
+
+message MstInstanceInterfaces {
+    repeated InterfacesInterface interface = 1;
+}
+
+message MstInstanceState {
+    uint32 mst_id = 1;
+    None vlan = 2;
+    None bridge_priority = 3;
+    None bridge_address = 4;
+    None designated_root_priority = 5;
+    None designated_root_address = 6;
+    uint32 root_port = 7;
+    uint32 root_cost = 8;
+    None hold_time = 9;
+    uint64 topology_changes = 10;
+    None time_since_topology_change = 11;
+}
+
+message MstInstanceConfig {
+    uint32 mst_id = 1;
+    None vlan = 2;
+    None bridge_priority = 3;
+}
+
+message MstInstancesMstInstance {
+    MstInstanceConfig config = 1;
+    MstInstanceState state = 2;
+    MstInstanceInterfaces interfaces = 3;
+}
+
+message MstpMstInstances {
+    repeated MstInstancesMstInstance mst_instance = 1;
+}
+
+message MstpState {
+    string name = 1;
+    uint32 revision = 2;
+    None max_hop = 3;
+    None hello_time = 4;
+    None max_age = 5;
+    None forwarding_delay = 6;
+    None hold_count = 7;
+}
+
+message MstpConfig {
+    string name = 1;
+    uint32 revision = 2;
+    None max_hop = 3;
+    None hello_time = 4;
+    None max_age = 5;
+    None forwarding_delay = 6;
+    None hold_count = 7;
+}
+
+message StpMstp {
+    MstpConfig config = 1;
+    MstpState state = 2;
+    MstpMstInstances mst_instances = 3;
+}
+
+message RstpInterfaces {
+    repeated InterfacesInterface interface = 1;
+}
+
+message RstpState {
+    None hello_time = 1;
+    None max_age = 2;
+    None forwarding_delay = 3;
+    None hold_count = 4;
+    None bridge_priority = 5;
+    None bridge_address = 6;
+    None designated_root_priority = 7;
+    None designated_root_address = 8;
+    uint32 root_port = 9;
+    uint32 root_cost = 10;
+    None hold_time = 11;
+    uint64 topology_changes = 12;
+    None time_since_topology_change = 13;
+}
+
+message RstpConfig {
+    None hello_time = 1;
+    None max_age = 2;
+    None forwarding_delay = 3;
+    None hold_count = 4;
+    None bridge_priority = 5;
+}
+
+message StpRstp {
+    RstpConfig config = 1;
+    RstpState state = 2;
+    RstpInterfaces interfaces = 3;
+}
+
+message GlobalState {
+    string enabled_protocol = 1;
+    bool bridge_assurance = 2;
+    bool etherchannel_misconfig_guard = 3;
+    None bpduguard_timeout_recovery = 4;
+    bool loop_guard = 5;
+    bool bpdu_guard = 6;
+    bool bpdu_filter = 7;
+}
+
+message GlobalConfig {
+    string enabled_protocol = 1;
+    bool bridge_assurance = 2;
+    bool etherchannel_misconfig_guard = 3;
+    None bpduguard_timeout_recovery = 4;
+    bool loop_guard = 5;
+    bool bpdu_guard = 6;
+    bool bpdu_filter = 7;
+}
+
+message StpGlobal {
+    GlobalConfig config = 1;
+    GlobalState state = 2;
+}
+
+message Stp {
+    StpGlobal global = 1;
+    StpRstp rstp = 2;
+    StpMstp mstp = 3;
+    StpRapidPvst rapid_pvst = 4;
+    StpInterfaces interfaces = 5;
+}
+

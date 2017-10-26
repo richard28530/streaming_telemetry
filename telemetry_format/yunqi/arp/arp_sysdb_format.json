@@ -4,7 +4,7 @@
         "address" : [
             {
                 "10.10.0.16" : {
-                    "mac_address" : ""
+                    "mac_address" : "",
                     "interface" : ""
                 }
             }

@@ -1,0 +1,37 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+package proto.rib;
+
+message EntriesEntry {
+    string destination = 1;
+    string netmask = 2;
+    string nexthop_mac = 3;
+    string interface = 4;
+}
+
+message RibTableEntries {
+    repeated EntriesEntry entry = 1;
+}
+
+message RibTable {
+    RibTableEntries entries = 1;
+}
+
+message Rib {
+    RibTable rib_table = 1;
+}
+

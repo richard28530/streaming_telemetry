@@ -1,0 +1,148 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+package proto.policy_forwarding;
+
+//Paths:
+
+message PolicyEntryTransport {
+    uint32 source_port = 1;
+    uint32 destination_port = 2;
+    string tcp_flags = 3;
+}
+
+enum IpVersion {
+    UNKNOWN = 0;
+    IPV4 = 1;
+    IPV6 = 2;
+}
+
+message PolicyEntryIp {
+    IpVersion ip_version = 1;
+    string source_ip_address = 2;
+    string source_ip_flow_label = 3;
+    uint32 destination_ip_address = 4;
+    uint32 destination_ip_flow_label = 5;
+    uint32 dscp = 6;
+    uint32 protocol = 7;
+    uint32 hop_limit = 8;
+}
+
+message PolicyEntryL2 {
+    bytes source_mac = 1;
+    bytes source_mac_mask = 2;
+    bytes destination_mac = 3;
+    bytes destination_mac_mask = 4;
+    uint32 ethertype = 5;
+}
+
+message PolicyEntryState {
+    uint32 sequence_id = 1;
+    string description = 2;
+    uint64 matched_packets = 3;
+    uint64 matched_octets = 4;
+}
+
+message PolicyEntryConfig {
+    uint32 sequence_id = 1;
+    string description = 2;
+}
+
+message PolicyEntriesPolicyEntry {
+    PolicyEntryConfig config = 1;
+    PolicyEntryState state = 2;
+    PolicyEntryL2 l2 = 3;
+    PolicyEntryIp ip = 4;
+    PolicyEntryTransport transport = 5;
+}
+
+message PolicySetPolicyEntries {
+    repeated PolicyEntriesPolicyEntry policy_entry = 1;
+}
+
+message ActionClassifying {
+    uint32 new_cos = 1;
+    uint32 new_dscp = 2;
+}
+
+message ActionMirroring {
+    string interface = 1;
+}
+
+message Committed {
+    uint32 rate = 1;
+    uint32 burst = 2;
+}
+
+message Peaked {
+    uint32 rate = 1;
+    uint32 burst = 2;
+}
+
+message ActionPolicing {
+    Committed committed = 1;   
+    Peaked peaked = 2;
+}
+
+message ActionRouting {
+    string mode = 1;
+    repeated string nexthop = 2;
+}
+
+message ActionSwitching {
+    string interface = 1;
+}
+
+message PolicyAction {
+    ActionClassifying classify = 1;
+    ActionMirroring mirroring = 2;
+    ActionPolicing policing = 3;
+    ActionRouting routing = 4;
+    ActionSwitching switching = 5;
+}
+
+message PolicyState {
+    uint64 matched_packets = 1;
+    uint64 matched_octets = 2;
+}
+
+message InterfacesInterface {
+    string id = 1;
+}
+
+message PolicyInterfaces {
+    repeated InterfacesInterface interface = 1;
+}
+
+message ForwardingPolicySets {
+    string name = 1;
+    string description = 2;
+    PolicySetPolicyEntries policy_entries = 3;
+    PolicyAction = 4;
+    PolicyInterfaces interfaces = 5;
+    PolicyState state = 6;
+}
+
+message InterfaceIngressPolicySets {
+    repeated IngressPolicySets ingress_policy_set = 1;
+}
+
+message PolicyForwarding {
+    ForwardingPolicySets policy_sets = 1;
+}
+

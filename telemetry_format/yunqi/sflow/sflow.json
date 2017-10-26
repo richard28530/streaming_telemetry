@@ -1,0 +1,30 @@
+# vim:set ft=json: 
+{
+    "protocols" : {
+        "sflow" : {
+            "samling_rate" : {
+                "ingress" : 4000,
+                "egress" : 4000
+            },
+            "polling_interval" : 10,
+            "header_length" : 128,
+            "collector" : {
+                "address" : "192.168.1.102",
+                "port" : 6343
+            },
+            "interface" : [
+                {
+                    "te-1/1/1" : {
+                        "enable" : true,
+                        "samling_rate" : {
+                            "ingress" : 4000,
+                            "egress" : 4000
+                        },
+                        "polling_interval" : 10,
+                        "header_length" : 128
+                    }
+                }
+            ]
+        }
+    }
+}

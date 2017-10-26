@@ -1,0 +1,65 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+// Paths:
+// sdrop/state
+// sdrop/config
+// sdrop
+
+package proto.sdrop;
+
+message SdropEntry {
+    string ingress_intf = 1;
+    string egress_intf = 2;
+    string drop_reason = 3;
+    string timestamp = 4;
+    string l2_dmac = 5;
+    string l2_smac = 6;
+    string ether_type = 7;
+    uint32 pkt_length = 8;
+    string tag_tpid = 9;
+    uint32 tag_vlan = 10;
+    uint32 arp_op_code = 11;
+    string arp_smac = 12;
+    string arp_sip = 13;
+    string arp_tmac = 14;
+    string arp_tip = 15;
+    string sip = 16;
+    string dip = 17;
+    uint32 ip_tos = 18;
+    uint32 ip_len = 19;
+    uint32 ip_ttl = 20;
+    uint32 ip_proto = 21;
+    uint32 l4_dport = 22;
+    uint32 l4_sport = 23;
+}
+
+message SdropState {
+    repeated SdropEntry entry = 1;
+}
+
+message SdropConfig {
+    string collector = 1;
+    uint32 polling_interval = 2;
+}
+
+message Sdrop {
+    SdropConfig config = 1;
+    SdropState state = 2;
+}
+

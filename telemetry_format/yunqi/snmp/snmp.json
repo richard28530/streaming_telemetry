@@ -1,0 +1,28 @@
+# vim:set ft=json: 
+{
+    "protocols" : {
+        "snmp" : {
+            "community" : [
+                {
+                    "public" : {
+                        "authorization" : "read-only",
+                        "client" : [
+                            "192.168.1.102",
+                            "192.168.1.103"
+                        ]
+                    }
+                }
+            ],
+            "contact" : "me",
+            "location" : "here",
+            "trap_group" : {
+                "targets" : [
+                    "192.168.1.102",
+                    "192.168.1.103"
+                ],
+                "version" : "v2"
+            }
+        }
+    }
+}
+

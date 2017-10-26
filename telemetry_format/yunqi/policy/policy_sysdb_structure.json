@@ -1,0 +1,57 @@
+# vim:set ft=json: 
+{
+    "policy" : {
+        "policy_statement" : [
+            {
+                "p1" : {
+                    "term" : [
+                        {
+                            "t1" : {
+                                "from" : {
+                                    "protocol" : "static",
+                                    "network4" : "",
+                                    "network4_list" : "",
+                                    "prefix_length4" : "",
+                                    "tag" : "",
+                                    "nexthop4" : ""
+                                },
+                                "to" : {
+                                    "protocol" : "static",
+                                    "network4" : "",
+                                    "network4_list" : "",
+                                    "prefix_length4" : "",
+                                    "tag" : "",
+                                    "nexthop4" : ""
+                                },
+                                "then" : {
+                                    "nexthop4" : "",
+                                    "next" : "",
+                                    "accept" : "",
+                                    "reject" : ""
+                                }
+                            }
+                        }
+                    ],
+                    "then" : {
+                        "accept" : "",
+                        "reject" : ""
+                    }
+                }
+            }
+        ],
+        "network4_list" : [
+            {
+                "n1" : {
+                    "network" : [
+                        {
+                            "11.11.11.0/24" : {
+                                "modifier" : ""
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
+

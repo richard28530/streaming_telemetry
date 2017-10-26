@@ -1,0 +1,130 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+//import "openconfig-interfaces.proto";
+//import "ietf-yang-types.proto";
+//import "openconfig-extensions.proto";
+
+package proto.lacp;
+
+// Paths:
+// lacp/interfaces/interface/members/member/state/counters
+// lacp/interfaces/interface/members/member/state
+// lacp/interfaces/interface/members/member
+// lacp/interfaces/interface/members
+// lacp/interfaces/interface/state
+// lacp/interfaces/interface/config
+// lacp/interfaces/interface
+// lacp/interfaces
+// lacp/state
+// lacp/config
+// lacp
+
+
+enum LacpActivityType {
+    ACTIVE = 0;
+    PASSIVE = 1;
+}
+
+enum LacpTimeoutType {
+    LONG = 0;
+    SHORT = 1;
+}
+
+enum LacpSynchronizationType {
+    IN_SYNC = 0;
+    OUT_SYNC = 1;
+}
+
+message StateCounters {
+    uint64 lacp_in_pkts = 1;
+    uint64 lacp_out_pkts = 2;
+    uint64 lacp_rx_errors = 3;
+    uint64 lacp_tx_errors = 4;
+    uint64 lacp_unknown_errors = 5;
+    uint64 lacp_errors = 6;
+}
+
+message MemberState {
+    string interface = 1;
+    LacpActivityType activity = 2;
+    LacpTimeoutType timeout = 3;
+    LacpSynchronizationType synchronization = 4;
+    bool aggregatable = 5;
+    bool collecting = 6;
+    bool distributing = 7;
+    bytes system_id = 8;
+    uint32 oper_key = 9;
+    bytes partner_id = 10;
+    uint32 partner_key = 11;
+    StateCounters counters = 12;
+}
+
+message MembersMember {
+    MemberState state = 1;
+}
+
+message InterfaceMembers {
+    repeated MembersMember member = 1;
+}
+
+enum LacpPeriodType {
+    FAST = 0;
+    SLOW = 1;
+}
+
+message InterfaceState {
+    string name = 1;
+    LacpPeriodType interval = 2;
+    LacpActivityType lacp_mode = 3;
+    bytes system_id_mac = 4;
+    uint32 system_priority = 5;
+}
+
+message InterfaceConfig {
+    string name = 1;
+    LacpPeriodType interval = 2;
+    LacpActivityType lacp_mode = 3;
+    bytes system_id_mac = 4;
+    uint32 system_priority = 5;
+}
+
+message InterfacesInterface {
+    InterfaceConfig config = 1;
+    InterfaceState state = 2;
+    InterfaceMembers members = 3;
+}
+
+message LacpInterfaces {
+    repeated InterfacesInterface interface = 1;
+}
+
+message LacpState {
+    uint32 system_priority = 1;
+}
+
+message LacpConfig {
+    uint32 system_priority = 1;
+}
+
+message Lacp {
+    LacpConfig config = 1;
+    LacpState state = 2;
+    LacpInterfaces interfaces = 3;
+}
+

@@ -1,0 +1,23 @@
+# vim:set ft=json: 
+{
+    "protocols" : {
+        "static" : {
+            "enable" : true,
+            "route" : [
+                {
+                    "11.11.11.0/24" : {
+                        "nexthop" : "1.1.1.1",
+                        "metric" : 10,
+                        "qualified_next_hop" : [
+                            {
+                                "3.3.3.3" : {
+                                    "metric" : 10
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

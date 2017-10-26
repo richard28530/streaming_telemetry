@@ -1,0 +1,15 @@
+# vim:set ft=json: 
+{
+    "vlans" : {
+        "vlan_id" : [
+            {
+                "1" : {
+                    "description" : "",
+                    "vlan_name" : "",
+                    "l3_interface" : ""
+                }
+            }
+        ]
+    }
+}
+

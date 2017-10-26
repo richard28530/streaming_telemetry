@@ -1,0 +1,158 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+// Paths:
+// interfaces/interface/state/counters
+// interfaces/interface/state
+// interfaces/interface/config
+// interfaces/interface/aggregation
+// interfaces/interface/aggregation/state
+// interfaces/interface/aggregation/config
+// interfaces/interface/aggregation/switching
+// interfaces/interface/ethernet
+// interfaces/interface/ethernet/state
+// interfaces/interface/ethernet/state/counters
+// interfaces/interface/ethernet/config
+// interfaces/interface/ethernet/switching
+// interfaces/interface
+// interfaces
+
+package proto.intf;
+
+message StateCounters {
+    uint64 in_octets = 1;
+    uint64 in_unicast_pkts = 2;
+    uint64 in_broadcast_pkts = 3;
+    uint64 in_multicast_pkts = 4;
+    uint64 in_discards = 5;
+    uint64 in_errors = 6;
+    uint32 in_unknown_protos = 7;
+    uint64 out_octets = 8;
+    uint64 out_unicast_pkts = 9;
+    uint64 out_broadcast_pkts = 10;
+    uint64 out_multicast_pkts = 11;
+    uint64 out_discards = 12;
+    uint64 out_errors = 13;
+    uint64 last_clear = 14;
+}
+
+message InterfaceState {
+    string type = 1;
+    uint32 mtu = 2;
+    string name = 3;
+    string description = 4;
+    bool enabled = 5;
+    uint32 ifindex = 6;
+    enum AdminStatus {
+        ADMIN_STATUS_UP = 0;
+        ADMIN_STATUS_DOWN = 1;
+        ADMIN_STATUS_TESTING = 2;
+    }
+    AdminStatus admin_status = 7;
+    enum OperStatus {
+        OPER_STATUS_UP = 0;
+        OPER_STATUS_DOWN = 1;
+        OPER_STATUS_TESTING = 2;
+        OPER_STATUS_UNKNOWN = 3;
+        OPER_STATUS_DORMANT = 4;
+        OPER_STATUS_NOT_PRESENT = 5;
+        OPER_STATUS_LOWER_LAYER_DOWN = 6;
+    }
+    OperStatus oper_status = 8;
+    uint64 last_change = 9;
+    StateCounters counters = 10;
+}
+
+message InterfaceConfig {
+    string type = 1;
+    uint32 mtu = 2;
+    string name = 3;
+    string description = 4;
+    bool enabled = 5;
+}
+
+message SwitchedVlan {
+    string mode = 1;
+    uint32 native_vlan = 2;
+    uint32 access_vlan = 3;
+    repeated uint32 trunk_vlans = 4;
+}
+
+message AggregationConfig {
+    string type = 1;
+    uint32 min_link = 2;
+}
+
+message AggregationState {
+    uint32 speed = 1;
+    repeated string member = 2;
+}
+
+message Aggregation {
+    AggregationConfig config = 1;
+    AggregationState state = 2;
+    SwitchedVlan switched_vlan = 3;
+}
+
+message EthernetStateCounter {
+    uint64 in_mac_control_frame = 1;
+    uint64 in_mac_pause_frames = 2;
+    uint64 in_oversize_frame = 3;
+    uint64 in_jabber_frames = 4;
+    uint64 in_fragement_frames = 5;
+    uint64 in_8021q_frames = 6;
+    uint64 in_crc_errors = 7;
+    uint64 out_mac_control_frames = 8;
+    uint64 out_mac_pause_frames = 9;
+    uint64 out_8021q_frames = 10;
+}
+
+message EthernetConfig {
+    bytes mac_address = 1;
+    bool auto_negotiate = 2;
+    string duplex_mode = 3;
+    uint32 speed = 4;
+    bool enable_flow_ctrl = 5;
+    string aggregate = 6;
+}
+
+message EthernetState {
+    bytes hw_mac_address = 1;
+    uint32 effective_speed = 2;
+    string negotiated_duple_mode = 3;
+    uint32 negotiated_port_speed = 4;
+    EthernetStateCounter counters = 5;
+}
+
+message Ethernet {
+    EthernetConfig config = 1;
+    EthernetState state = 2;
+    SwitchedVlan switched_vlan = 3;
+}
+
+message InterfacesInterface {
+    InterfaceConfig config = 1;
+    InterfaceState state = 2;
+    Aggregation aggregation = 3;
+    Ethernet ethernet = 4;
+}
+
+message Interfaces {
+    repeated InterfacesInterface interface = 1;
+}
+

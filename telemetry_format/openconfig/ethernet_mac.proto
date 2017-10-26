@@ -1,0 +1,62 @@
+//
+// Copyright 2016 YUNQI TECH Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+// Paths:
+// ethernet_mac/state
+// ethernet_mac/config
+// ethernet_mac
+
+package proto.ethernet_mac;
+
+message EntriesEntry {
+    uint32 id = 1;
+    bytes mac_address = 2;
+    enum EntryType {
+        ENTRY_TYPE_STATIC = 0;
+        ENTRY_TYPE_DYNAMIC = 1;
+    }
+    EntryType entry_type = 3;
+    string interface = 4;
+}
+
+message MacTableEntries {
+    repeated EntriesEntry entry = 1;
+}
+
+message FdbMacTable {
+    MacTableEntries entries = 1;
+}
+
+message FdbState {
+    bool mac_learning = 1;
+    uint32 mac_aging_time = 2;
+    uint32 maximum_entries = 3;
+}
+
+message FdbConfig {
+    bool mac_learning = 1;
+    uint32 mac_aging_time = 2;
+    uint32 maximum_entries = 3;
+}
+
+message Fdb {
+    FdbConfig config = 1;
+    FdbState state = 2;
+    FdbMacTable mac_table = 3;
+}
+
