@@ -39,8 +39,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/connetos/streaming_telemetry/client/auth/credential"
-	"github.com/connetos/streaming_telemetry/client/query"
+	"github.com/richard28530/streaming_telemetry/client/auth/credential"
+	"github.com/richard28530/streaming_telemetry/client/query"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -82,15 +82,11 @@ func ParseQuery(s, delimiter string) query.Query {
 
         elems := []string {}
 
-        log.Infof("%v", qItem)
         for len(qItem) > 0 {
             var param_delim_offset uint = uint(strings.Index(qItem, "["))
             var elem_delim_offset uint = uint(strings.Index(qItem, "/"))
 
-            log.Infof("%v %v", param_delim_offset, elem_delim_offset)
             if (elem_delim_offset > param_delim_offset) {
-                log.Infof("%v", qItem)
-//                s := qItem[0: strings.Index(qItem, "]") + 1]
                 s := qItem[1: strings.Index(qItem, "]")]
                 elems = append(elems, s)
                 if (strings.Index(qItem, "]") + 2 >= len(qItem)) {
@@ -102,7 +98,6 @@ func ParseQuery(s, delimiter string) query.Query {
                 s := qItem[0: elem_delim_offset]
                 qItem = qItem[elem_delim_offset + 1: len(qItem)]
                 elems = append(elems, s)
-                log.Infof("%v", qItem)
             } else {
                 elems = append(elems, qItem)
                 qItem = ""
@@ -121,6 +116,7 @@ func main() {
 		log.Fatal("--query must be set")
 	}
 	q.Target = *targetFlag
+
 	if *tlsFlag {
 		var sn string
 		if *serverHostOverride != "" {
@@ -145,16 +141,20 @@ func main() {
 	} else {
 	    q.DialOptions = append(q.DialOptions, grpc.WithInsecure())
 	}
+
 	if *user != "" {
+        log.Infof("user %s: %s", *user, *passwd)
 		pc := credential.NewPassCred(*user, *passwd, true)
 		q.DialOptions = append(q.DialOptions, grpc.WithPerRPCCredentials(pc))
 	}
+
 	if *outfile != "" {
 		f, err := os.Create(*outfile)
 		var fMu sync.Mutex
 		if err != nil {
 			log.Fatalf("Failed to open file %s: %s", *outfile, err)
 		}
+
 		cfg.Display = func(b []byte) {
 			fMu.Lock()
 			defer fMu.Unlock()
@@ -163,20 +163,12 @@ func main() {
 			f.Write(n)
 		}
 	}
-	switch {
-	case q.Update != nil:
-		if err := query.Update(context.Background(), q, &cfg); err != nil {
-			log.Infof("query.Update failed for query %v %v: %s\n", cfg, q, err)
-		}
-	case len(q.Queries) > 0 && *subscribe:
+
+	if len(q.Queries) > 0 && *subscribe {
 		cfg.Once = *subscribeOnce
         q.Encoding = *encoding
 		if err := query.DisplayStream(context.Background(), q, &cfg); err != nil {
 			log.Infof("query.DisplayStream failed for query %v %v: %s\n", cfg, q, err)
-		}
-	default:
-		if err := query.Display(context.Background(), q, &cfg); err != nil {
-			log.Infof("query.Display failed for query %v %v: %s\n", cfg, q, err)
 		}
 	}
 }

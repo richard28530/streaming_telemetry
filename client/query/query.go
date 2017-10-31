@@ -27,7 +27,7 @@ import (
 	"google.golang.org/grpc/codes"
 
 	log "github.com/golang/glog"
-	ocpb "github.com/connetos/streaming_telemetry/rpc"
+	ocpb "github.com/richard28530/streaming_telemetry/rpc"
 )
 
 const (
@@ -54,8 +54,6 @@ type Query struct {
 	DialOptions []grpc.DialOption
 	// Queries is a list queries made of query elements.
 	Queries [][]string
-	// Update is a single SetRequest to be made on the target.
-	Update *ocpb.SetRequest
     Encoding    string
 }
 
@@ -67,28 +65,6 @@ type Config struct {
 	DialTimeout time.Duration
 	Display     func([]byte)
 	TimeFormat  string
-}
-
-// Display creates a gRPC connection to the query target and makes a Get call
-// for the queried paths and displays the response via cfg.Display.
-func Display(ctx context.Context, query Query, cfg *Config) error {
-	c, err := createClient(ctx, query, cfg)
-	if err != nil {
-		return err
-	}
-	request, err := createRequest(query)
-	if err != nil {
-		return err
-	}
-	log.Infof("Get with:\n%s\n", request)
-	resp, err := c.Get(ctx, request)
-	if err != nil {
-		return err
-	}
-	for _, n := range resp.GetNotification() {
-		cfg.Display([]byte(n.String()))
-	}
-	return nil
 }
 
 // DisplayStream creates a gRPC connection to the query target and makes a
@@ -125,7 +101,7 @@ func DisplayStream(ctx context.Context, query Query, cfg *Config) error {
 		switch resp.Response.(type) {
 		default:
 			log.Infof("Unknown response:\n%s\n", resp.String())
-		//case *ocpb.SubscribeResponse_Heartbeat:
+		case *ocpb.SubscribeResponse_Heartbeat:
 			log.Infof("Heartbeat:%s\n", resp.String())
 		case *ocpb.SubscribeResponse_Update:
 			cfg.Display([]byte(proto.MarshalTextString(resp)))
@@ -137,25 +113,6 @@ func DisplayStream(ctx context.Context, query Query, cfg *Config) error {
 			}
 		}
 	}
-}
-
-// Update sends a SetRequest to the target.  If the Set fails an error will be
-// returned.  The response will be displayed by the configure cfg.Display.
-func Update(ctx context.Context, query Query, cfg *Config) error {
-	c, err := createClient(ctx, query, cfg)
-	_ = c
-	if err != nil {
-		return err
-	}
-	if query.Update == nil {
-		return fmt.Errorf("query.Updates must be defined for Update")
-	}
-	resp, err := c.Set(ctx, query.Update)
-	if err != nil {
-		return fmt.Errorf("failed to set %s: %s", proto.MarshalTextString(query.Update), err)
-	}
-	cfg.Display([]byte(resp.String()))
-	return nil
 }
 
 func createClient(ctx context.Context, query Query, cfg *Config) (ocpb.GNMIClient, error) {
@@ -178,24 +135,7 @@ func createClient(ctx context.Context, query Query, cfg *Config) (ocpb.GNMIClien
 	return ocpb.NewGNMIClient(conn), nil
 }
 
-func createRequest(q Query) (*ocpb.GetRequest, error) {
-	r := &ocpb.GetRequest{}
-	for _, qItem := range q.Queries {
-		p := &ocpb.Path{
-			Element: qItem,
-		}
-		r.Path = append(r.Path, p)
-	}
-	return r, nil
-}
-
 func createSubscribeRequest(q Query) (*ocpb.SubscribeRequest, error) {
-	// TODO(hines): Re-add once bug is resolved for lack of mode support.
-	//subList := &ocpb.SubscriptionList{
-	//	 Mode: &ocpb.SubscriptionList_Once{
-	//	 Once: true,
-	//	 },
-	// }
 	subList := &ocpb.SubscriptionList{}
     for _, qItem := range q.Queries {
         if q.Encoding == "proto" {
@@ -219,3 +159,4 @@ func createSubscribeRequest(q Query) (*ocpb.SubscribeRequest, error) {
 			Subscribe: subList,
 		}}, nil
 }
+

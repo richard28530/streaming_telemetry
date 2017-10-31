@@ -14,4 +14,4 @@
 // limitations under the License.
 package gnmi
 
-//go:generate sh -c "cd $GOPATH/src && protoc --proto_path=. --go_out=Mgithub.com/google/protobuf/src/google/protobuf/descriptor.proto=github.com/golang/protobuf/protoc-gen-go/descriptor,plugins=grpc:. github.com/openconfig/reference/rpc/gnmi/gnmi.proto"
+//go:generate sh -c "cd $GOPATH/src && protoc --proto_path=. --go_out=Mgithub.com/google/protobuf/src/google/protobuf/descriptor.proto=github.com/golang/protobuf/protoc-gen-go/descriptor,plugins=grpc:. github.com/richard28530/streaming_telemetry/rpc/gnmi.proto"

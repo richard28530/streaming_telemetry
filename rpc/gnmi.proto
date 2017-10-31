@@ -39,30 +39,23 @@ extend google.protobuf.FileOptions {
 option (gnmi_service) = "0.2.0";
 
 service gNMI {
-  // Capabilities allows the client to retrieve the set of capabilities that
-  // is supported by the target. This allows the target to validate the
-  // service version that is implemented and retrieve the set of models that
-  // the target supports. The models can then be specified in subsequent RPCs
-  // to restrict the set of data that is utilized.
-  // Reference: gNMI Specification Section 3.2
-  rpc Capabilities(CapabilityRequest) returns (CapabilityResponse);
-  // Retrieve a snapshot of data from the target. A Get RPC requests that the
-  // target snapshots a subset of the data tree as specified by the paths
-  // included in the message and serializes this to be returned to the
-  // client using the specified encoding.
-  // Reference: gNMI Specification Section 3.3
-  rpc Get(GetRequest) returns (GetResponse);
-  // Set allows the client to modify the state of data on the target. The
-  // paths to modified along with the new values that the client wishes
-  // to set the value to.
-  // Reference: gNMI Specification Section 3.4
-  rpc Set(SetRequest) returns (SetResponse);
   // Subscribe allows a client to request the target to send it values
   // of particular paths within the data tree. These values may be streamed
   // at a particular cadence (STREAM), sent one off on a long-lived channel
   // (POLL), or sent as a one-off retrieval (ONCE).
   // Reference: gNMI Specification Section 3.5
   rpc Subscribe(stream SubscribeRequest) returns (stream SubscribeResponse);
+}
+
+// ModelData is used to describe a set of schema modules. It can be used in a
+// CapabilityResponse where a target reports the set of modules that it
+// supports, and within the SubscribeRequest and GetRequest messages to specify
+// the set of models from which data tree elements should be reported.
+// Reference: gNMI Specification Section 3.2.3
+message ModelData {
+    string name = 1;            // Name of the model.
+    string organization = 2;    // Organization publishing the model.
+    string version = 3;         // Semantic version of the model.
 }
 
 // Notification is a re-usable message that is used to encode data from the
@@ -138,6 +131,7 @@ message Error {
 message SubscribeRequest {
   oneof request {
     SubscriptionList subscribe = 1; // Specify the paths within a subscription.
+    Heartbeat heartbeat = 2;  // See description for Heartbeat
     Poll poll = 3;                  // Trigger a polled update.
     AliasList aliases = 4;          // Aliases to be created.
   }
@@ -150,6 +144,15 @@ message SubscribeRequest {
 message Poll {
 }
 
+// A Heartbeat requests a (possibly repeated) response from the remote side.
+message Heartbeat {
+  // interval is the maximum amount of time, in nanoseconds, between subsequent
+  // messages from the remote side.  An empty message may be sent if no other
+  // messages are pending.  If interval is 0 then the remote must immediately
+  // respond with a (possibly empty) message.
+  uint64 interval = 1;
+}
+
 // SubscribeResponse is the message used by the target within a Subscribe RPC.
 // The target includes a Notification message which is used to transmit values
 // of the path(s) that are associated with the subscription. The same message
@@ -160,6 +163,7 @@ message Poll {
 message SubscribeResponse {
   oneof response {
     Notification update = 1;    // Changed or sampled value for a path.
+    Heartbeat heartbeat = 2;  // See description for Heartbeat
     bool sync_response = 3;     // Indicate target has sent all values once.
     Error error = 4;            // Report an occurred in the Subscription.
   }
@@ -183,12 +187,7 @@ message SubscriptionList {
     POLL = 2;   // Values sent in response to a poll request (Sec. 3.5.1.5.3).
   }
   Mode mode = 5;
-  // Whether elements of the schema that are marked as eligible for aggregation
-  // should be aggregated or not.
-  bool allow_aggregation = 6;
-  // The set of schemas that define the elements of the data tree that should
-  // be sent by the target.
-  repeated ModelData use_models = 7;
+  ModelData use_model = 6;
 }
 
 // Subscription is a single request within a SubscriptionList. The path
@@ -199,15 +198,16 @@ message SubscriptionList {
 message Subscription {
   Path path = 1;                    // The data tree path.
   SubscriptionMode mode = 2;        // Subscription mode to be used.
-  uint64 sample_interval = 3;       // ns between samples in SAMPLE mode.
+  SubscriptionOperation op = 3;     // Operation
+  uint64 sample_interval = 4;       // ns between samples in SAMPLE mode.
   // Indicates whether values that not changed should be sent in a SAMPLE
   // subscription.
-  bool suppress_redundant = 4;
+  bool suppress_redundant = 5;
   // Specifies the maximum allowable silent period in nanoseconds when
   // suppress_redundant is in use. The target should send a value at least once
   // in the period specified.
-  uint64 heartbeat_interval = 5;
-  Encoding encoding = 6;                // Encoding to be used.
+  uint64 heartbeat_interval = 6;
+  Encoding encoding = 7;                // Encoding to be used.
 }
 
 // SubscriptionMode is the mode of the subscription, specifying how the
@@ -217,6 +217,13 @@ enum SubscriptionMode {
   TARGET_DEFINED = 0;  // The target selects the relevant mode for each element.
   ON_CHANGE      = 1;  // The target sends an update on element value change.
   SAMPLE         = 2;  // The target samples values according to the interval.
+}
+
+// SubscriptionOperation is the operation of the subscription, sepcifying
+// if is subscribe or subscibe_cancel
+enum SubscriptionOperation {
+    SUBSCRIBE_ADD = 0;
+    SUBSCRIBE_CANCEL = 1;
 }
 
 // QOSMarking specifies the DSCP value to be set on transmitted telemetry
@@ -243,104 +250,25 @@ message AliasList {
   repeated Alias alias = 1;    // The set of aliases to be created.
 }
 
-// SetRequest is sent from a client to the target to update values in the data
-// tree. Paths are either deleted by the client, or modified by means of being
-// updated, or replaced. Where a replace is used, unspecified values are
-// considered to be replaced, whereas when update is used the changes are
-// considered to be incremental. The set of changes that are specified within
-// a single SetRequest are considered to be a transaction.
-// Reference: gNMI Specification Section 3.4.1
-message SetRequest {
-  Path prefix = 1;                // Prefix used for paths in the message.
-  repeated Path delete = 2;       // Paths to be deleted from the data tree.
-  repeated Update replace = 3;    // Updates specifying elements to be replaced.
-  repeated Update update = 4;     // Updates specifying elements to updated.
-}
+// UDPWrapper adds metadata necessary for encapsulating a list of notifications
+// into a UDP packet.  It adds the ability to identify the target that
+// originated the Notifications, detect packet loss, and identify latency
+// introduced by the target wrapping notifications.
+//
+// The target should keep the total size of a serialized UDPWrapper message
+// small enough to not cause IP packet fragmentation.
+message UDPWrapper {
+    // ID Identifies the target (e.g., Loopback IP address, linecard, ...)
+    // TODO(borman): Add examples.  Perhaps agent/module/submodule for vendor.
+    Path id = 1;
 
-// SetResponse is the response to a SetRequest, sent from the target to the
-// client. It reports the result of the modifications to the data tree that were
-// specified by the client.
-// Reference: gNMI Specification Section 3.4.2
-message SetResponse {
-  Path prefix = 1;                      // Prefix used for paths.
-  // A set of responses specifying the result of the operations specified in
-  // the SetRequest.
-  repeated UpdateResult response = 2;
-  Error message = 3;                  // The overall status of the transaction.
-}
+    // Optional Epoch time of when the message is queued for transmit.
+    // Useful to quantify delay between message generation and transmission.
+    uint64 transmit_timestamp = 2;
 
-// UpdateResult is used within the SetResponse message to communicate the
-// result of an operation specified within a SetRequest message.
-// Reference: gNMI Specification Section 3.4.2
-message UpdateResult {
-  // The operation that was associated with the Path specified.
-  enum Operation {
-    INVALID = 0;
-    DELETE = 1;           // The result relates to a delete of Path.
-    REPLACE = 2;          // The result relates to a replace of Path.
-    UPDATE = 3;           // The result relates to an update of Path.
-  }
-  int64 timestamp = 1;    // Timestamp of generation (ns since epoch).
-  Path path = 2;          // Path associated with the update.
-  Error message = 3;      // Status of the update operation.
-  Operation op = 4;       // Operation type associated with the update.
-}
+    // The sequence_number must start at 1 and increment by 1 for each new packet
+    // sent.  A client may use this to determine if a packet was lost.
+    uint64 sequence_number = 3;
 
-// GetRequest is sent when a client initiates a Get RPC. It is used to specify
-// the set of data elements for which the target should return a snapshot of
-// data. The use_models field specifies the set of schema modules that are to
-// be used by the target - where use_models is not specified then the target
-// must use all schema models that it has.
-// Reference: gNMI Specification Section 3.3.1
-message GetRequest {
-  Path prefix = 1;                      // Prefix used for paths.
-  repeated Path path = 2;               // Paths requested by the client.
-  // Type of elements within the data tree.
-  enum DataType {
-    ALL = 0;                            // All data elements.
-    CONFIG = 1;                         // Config (rw) only elements.
-    STATE = 2;                          // State (ro) only elements.
-    // Data elements marked in the schema as operational. This refers to data
-    // elements whose value relates to the state of processes or interactions
-    // running on the device.
-    OPERATIONAL = 3;
-  }
-  DataType type = 3;                    // The type of data being requested.
-  Encoding encoding = 5;                // Encoding to be used.
-  repeated ModelData use_models = 6;    // The schema models to be used.
-}
-
-// GetResponse is used by the target to respond to a GetRequest from a client.
-// The set of Notifications corresponds to the data values that are requested
-// by the client in the GetRequest.
-// Reference: gNMI Specification Section 3.3.2
-message GetResponse {
-  repeated Notification notification = 1;   // Data values.
-  Error error = 2;                          // Errors that occurred in the Get.
-}
-
-// CapabilityRequest is sent by the client in the Capabilities RPC to request
-// that the target reports its capabilities.
-// Reference: gNMI Specification Section 3.2.1
-message CapabilityRequest {
-}
-
-// CapabilityResponse is used by the target to report its capabilities to the
-// client within the Capabilities RPC.
-// Reference: gNMI Specification Section 3.2.2
-message CapabilityResponse {
-  repeated ModelData supported_models = 1;    // Supported schema models.
-  repeated Encoding supported_encodings = 2;  // Supported encodings.
-  string gNMI_version = 3;                    // Supported gNMI version.
-}
-
-// ModelData is used to describe a set of schema modules. It can be used in a
-// CapabilityResponse where a target reports the set of modules that it
-// supports, and within the SubscribeRequest and GetRequest messages to specify
-// the set of models from which data tree elements should be reported.
-// Reference: gNMI Specification Section 3.2.3
-message ModelData {
-  string name = 1;            // Name of the model.
-  string organization = 2;    // Organization publishing the model.
-  string version = 3;         // Semantic version of the model.
+    repeated Notification notification = 4;
 }
