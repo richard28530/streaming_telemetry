@@ -12,6 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package gnmi
+package smetric_rpc
 
 //go:generate sh -c "cd $GOPATH/src && protoc --proto_path=. --go_out=Mgithub.com/google/protobuf/src/google/protobuf/descriptor.proto=github.com/golang/protobuf/protoc-gen-go/descriptor,plugins=grpc:. github.com/richard28530/streaming_telemetry/rpc/gnmi.proto"

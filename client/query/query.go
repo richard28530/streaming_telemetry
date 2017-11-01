@@ -151,8 +151,14 @@ func createSubscribeRequest(q Query) (*ocpb.SubscribeRequest, error) {
                     Element: qItem,
                 },
                 Encoding: ocpb.Encoding_JSON,
+                SampleInterval: 5,
             })
         }
+    }
+    subList.UseModel = &ocpb.ModelData{
+        Name : "openconfig",
+        Organization : "OPENCONFIG ORG.",
+        Version : "1.0.0",
     }
 	return &ocpb.SubscribeRequest{
 		Request: &ocpb.SubscribeRequest_Subscribe{
