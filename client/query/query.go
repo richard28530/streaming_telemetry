@@ -104,7 +104,18 @@ func DisplayStream(ctx context.Context, query Query, cfg *Config) error {
 		case *ocpb.SubscribeResponse_Heartbeat:
 			log.Infof("Heartbeat:%s\n", resp.String())
 		case *ocpb.SubscribeResponse_Update:
-			cfg.Display([]byte(proto.MarshalTextString(resp)))
+//			cfg.Display([]byte(proto.MarshalTextString(resp)))
+            n := resp.GetUpdate()
+            for i, u := range n.Update {
+                fmt.Printf("Update %d\n", i)
+                fmt.Printf("Path %s\n", proto.MarshalTextString(u.Path))
+
+                if ocpb.Encoding_JSON == u.Value.Type {
+                    fmt.Printf("%s\n", u.Value.Value)
+                } else {
+                    fmt.Printf("%s\n", u.Value.Value)
+                }
+            }
 		case *ocpb.SubscribeResponse_SyncResponse:
 			log.Infof("Sync Response: %s", resp.String())
 			if cfg.Once {
@@ -144,6 +155,7 @@ func createSubscribeRequest(q Query) (*ocpb.SubscribeRequest, error) {
                     Element: qItem,
                 },
                 Encoding: ocpb.Encoding_PROTO,
+                SampleInterval: 5,
             })
         } else {
             subList.Subscription = append(subList.Subscription, &ocpb.Subscription{
